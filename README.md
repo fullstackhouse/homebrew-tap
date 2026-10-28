@@ -2,9 +2,13 @@
 
 ```bash
 brew tap fullstackhouse/tap
-brew install --cask paseo-fsh           # fresh install
-brew install --cask --adopt paseo-fsh   # take over a Paseo.app you installed from the DMG
+brew trust --cask fullstackhouse/tap/paseo-fsh   # Homebrew 7 refuses to load an untrusted tap
+brew install --cask paseo-fsh                    # fresh install
+brew install --cask --adopt paseo-fsh            # take over a Paseo.app you installed from the DMG
 ```
+
+Trust is a one-off, per machine. Skip it and `brew` stops with
+`Refusing to load cask fullstackhouse/tap/paseo-fsh from untrusted tap`.
 
 Update to the newest FSH build:
 
