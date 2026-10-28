@@ -20,8 +20,8 @@ cask "paseo-fsh" do
   binary "#{appdir}/Paseo.app/Contents/Resources/bin/paseo"
 
   # FSH builds are ad-hoc signed, not notarized: without this macOS reports the app as damaged.
-  postflight do
-    system_command "/usr/bin/xattr", args: ["-cr", "#{appdir}/Paseo.app"]
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-cr", "{{appdir}}/Paseo.app"]
   end
 
   caveats <<~EOS
