@@ -1,8 +1,8 @@
 cask "paseo-fsh" do
-  version "0.13.0-beta.1-dafb5d6"
-  sha256 "aa994104df7a41e69d03256ba0dc33dcb6bbe29ccc035f6b4d496f812f2cafe0"
+  version "0.13.0-beta.1-15c0b7e"
+  sha256 "a58fba932225520085f037328037d07c18312d3282ee6dc49f28d271a9bc939f"
 
-  url "https://github.com/fullstackhouse/paseo/releases/download/fsh-0.13.0-beta.1-dafb5d6/Paseo-0.13.0-beta.1-arm64.dmg"
+  url "https://github.com/fullstackhouse/paseo/releases/download/fsh-0.13.0-beta.1-15c0b7e/Paseo-0.13.0-beta.1-arm64.dmg"
   name "Paseo (FSH)"
   desc "Full Stack House build of Paseo, the self-hosted daemon for AI coding agents"
   homepage "https://github.com/fullstackhouse/paseo"
