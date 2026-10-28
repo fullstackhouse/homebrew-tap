@@ -1,23 +1,62 @@
 # Full Stack House Homebrew tap
 
+Homebrew casks and formulae for Full Stack House's own macOS builds.
+
 ```bash
 brew tap fullstackhouse/tap
-brew trust --cask fullstackhouse/tap/paseo-fsh   # Homebrew 7 refuses to load an untrusted tap
-brew install --cask paseo-fsh                    # fresh install
-brew install --cask --adopt paseo-fsh            # take over a Paseo.app you installed from the DMG
 ```
 
-Trust is a one-off, per machine. Skip it and `brew` stops with
-`Refusing to load cask fullstackhouse/tap/paseo-fsh from untrusted tap`.
+## What's in here
 
-Update to the newest FSH build:
+### `paseo-fsh`
+
+The [FSH fork](https://github.com/fullstackhouse/paseo) of [Paseo](https://paseo.sh), the
+self-hosted daemon for AI coding agents. Apple Silicon, macOS 13+, and it conflicts with the
+upstream `paseo` cask — you can have one or the other, not both.
+
+**Install and upgrade steps, the DMG fallback and troubleshooting:
+[FSH.md](https://github.com/fullstackhouse/paseo/blob/fsh/FSH.md#install-the-desktop-app-macos-apple-silicon).**
+
+Per-app instructions live with the app, not here. This file only covers what is true of the tap
+itself.
+
+## Trusting the tap
+
+Homebrew 6 introduced [tap trust](https://docs.brew.sh/Tap-Trust): it will not load code from a
+third-party tap until you say so. Until you do, every command stops with
+
+```
+Error: Refusing to load cask fullstackhouse/tap/<cask> from untrusted tap fullstackhouse/tap.
+```
+
+Trust is a one-off, and recorded **per machine** — a new laptop needs it again.
 
 ```bash
-brew upgrade --cask paseo-fsh
+brew trust --cask fullstackhouse/tap/<cask>   # just this cask (preferred)
+brew trust fullstackhouse/tap                 # the whole tap, including anything added later
 ```
 
-Then quit Paseo (⌘Q) and reopen it. Paseo runs the daemon your agents live in, so pick a moment when no agent is mid-turn.
+Prefer the per-cask form. Whole-tap trust also covers casks and formulae we add in the future,
+which you will not have reviewed.
 
-`paseo-fsh` is the [FSH fork](https://github.com/fullstackhouse/paseo) of Paseo, Apple Silicon only. It conflicts with the upstream `paseo` cask. The cask follows the latest `fsh-*` release within 30 minutes (`.github/workflows/bump.yml`).
+## Signing
 
-FSH builds are ad-hoc signed and not notarized, so the cask clears the quarantine flag after install. Homebrew 5 deprecated unsigned casks; this tap is a stopgap until the builds are signed.
+FSH builds are ad-hoc signed, not notarized with an Apple Developer ID. macOS would report them
+as damaged, so each cask clears the quarantine flag itself after install. Nothing extra to run,
+but it does mean no in-app auto-update: that needs a signed build.
+
+## Keeping casks current
+
+Each cask has a workflow in `.github/workflows/` that polls the source repo's latest release and
+pushes a version/sha bump — no cross-repo token needed, so the default `GITHUB_TOKEN` is enough.
+`paseo-fsh` follows the newest `fsh-*` release within 30 minutes (`bump.yml`).
+
+Casks skip `livecheck` because of this; `brew livecheck` would fight the bump workflow.
+
+## Adding a cask
+
+1. Add `Casks/<name>.rb`. Use `postflight_steps` (not the deprecated `postflight`) for any
+   post-install step, and `{{appdir}}` rather than `#{appdir}` inside it.
+2. Add a bump workflow modelled on `bump.yml` if the source repo cuts releases.
+3. Add a `### <name>` section above pointing at the app's own docs. Do not paste install steps here.
+4. Check `brew style --cask Casks/<name>.rb` is clean before opening the PR.
