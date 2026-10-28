@@ -7,10 +7,11 @@ cask "paseo-fsh" do
   desc "Full Stack House build of Paseo, the self-hosted daemon for AI coding agents"
   homepage "https://github.com/fullstackhouse/paseo"
 
-  # Bumped by .github/workflows/bump.yml from the latest fullstackhouse/paseo release.
   livecheck do
-    skip "Updated by the tap's bump workflow"
+    skip "Retired: FSH builds install with fullstackhouse/paseo's scripts/install-fsh.sh"
   end
+
+  disable! date: "2026-10-28", because: "moved to an install script (curl -fsSL https://raw.githubusercontent.com/fullstackhouse/paseo/fsh/scripts/install-fsh.sh | bash), which also removes this cask"
 
   conflicts_with cask: "paseo"
   depends_on arch: :arm64
